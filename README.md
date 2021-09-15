@@ -10,3 +10,13 @@ A project template for using [grid-reactors](https://github.com/Eugleo/purescrip
 5. Run `npm install` to install the javascript dependencies, such as `spago` and `purescript`.
 6. Run `npm run spago-build` to build the project and install the purescript dependencies. Anytime you want to build the project, use this command instead of `spago build`.
 7. Finally, run `npm start` to start a server that will be serving your webpage. Update the code in `src/Main.purs`, and the webpage will change accordingly.
+
+If you want to install additional spago packages, do so by running `npm run spago-install`.
+
+### Changing the name of the project
+
+Once you have a name for your project, make the updates in the following three places:
+
+- Inbetween the `title` tags in `dev/index.html`. This will change the title of the webpage.
+- The field `name` in `spago.dhall`.
+- The field `name` in `package.json`.
