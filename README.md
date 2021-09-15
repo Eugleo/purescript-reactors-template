@@ -4,6 +4,7 @@ A project template for using [grid-reactors](https://github.com/Eugleo/purescrip
 
 ## How to use
 
+1. Sign-in to your GitHub account.
 1. Click **Use this template** above the list of files. GitHub will walk you through creating your own repository with same folder structure as this one.
 2. Clone your new repository using `git clone`.
 3. Move to the cloned repository with `cd`.
