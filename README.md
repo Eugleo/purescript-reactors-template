@@ -4,8 +4,9 @@ A project template for using [grid-reactors](https://github.com/Eugleo/purescrip
 
 ## How to use
 
-Click **Use this template** above the list of files. GitHub will walk you through creating your own repository with same folder structure as this one.
-
-## Troubleshooting
-
-This project uses `npm` to manage `purs` and `spago`, instead of using the globally installed binaries. If you're using the Purescript extension in VS Code, be sure to set `Purescript: Add Npm Path` in the preferences to true. This way, the extension will be using the `npm`-managed packages as well.
+1. Click **Use this template** above the list of files. GitHub will walk you through creating your own repository with same folder structure as this one.
+2. Clone your new repository using `git clone`.
+3. Move to the cloned repository with `cd`.
+5. Run `npm install` to install the javascript dependencies, such as `spago` and `purescript`.
+6. Run `npm run spago-build` to build the project and install the purescript dependencies. Anytime you want to build the project, use this command instead of `spago build`.
+7. Finally, run `npm start` to start a server that will be serving your webpage. Update the code in `src/Main.purs`, and the webpage will change accordingly.
