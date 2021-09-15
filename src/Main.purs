@@ -2,13 +2,11 @@ module Main where
 
 import Prelude
 
-import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Reactor
   ( CoordinateSystem
   , Reactor
-  , canvas
   , cell
   , executeDefaultBehavior
   , fill
@@ -20,9 +18,9 @@ import Reactor
   , utilities
   , wrt
   )
-import Reactor.Events (KeypressEvent(..), MouseEvent(..), TickEvent(..))
+import Reactor.Events (KeypressEvent(..), MouseEvent(..))
 import Reactor.Graphics.Colors as Color
-import Reactor.Graphics.CoordinateSystem (withCoords)
+import Reactor.Graphics.CoordinateSystem (moveDown, moveLeft, moveRight, moveUp)
 import Reactor.Internal.Helpers (withJust)
 
 main :: Effect Unit
@@ -33,16 +31,14 @@ type Point = CoordinateSystem { x :: Number, y :: Number }
 type World =
   { player :: Point
   , cursor :: Maybe Point
-  , velocity :: { x :: Number, y :: Number }
   , paused :: Boolean
   }
 
 reactor :: forall m. Reactor m World
-reactor = { init, onMouse, onKey, onTick, draw }
+reactor = { init, onMouse, onKey, draw, onTick: \_ -> pure unit }
   where
   init =
     { player: { x: 0, y: 0 } `wrt` grid
-    , velocity: { x: 0.0, y: 0.0 }
     , cursor: Nothing
     , paused: false
     }
@@ -56,30 +52,21 @@ reactor = { init, onMouse, onKey, onTick, draw }
     preventDefaultBehavior
 
   onKey (KeypressEvent key _) = do
-    { cellSize } <- utilities
-    let
-      perSec = ((toNumber cellSize) * _)
-      speed = perSec 30.0
+    { bound } <- utilities
     case key of
       "ArrowLeft" -> do
-        modify_ \w -> w { velocity = { x: -speed, y: 0.0 } }
+        modify_ \w -> w { player = bound $ moveLeft w.player }
         preventDefaultBehavior
       "ArrowRight" -> do
-        modify_ \w -> w { velocity = { x: speed, y: 0.0 } }
+        modify_ \w -> w { player = bound $ moveRight w.player }
         preventDefaultBehavior
       "ArrowDown" -> do
-        modify_ \w -> w { velocity = { x: 0.0, y: speed } }
+        modify_ \w -> w { player = bound $ moveDown w.player }
         preventDefaultBehavior
       "ArrowUp" -> do
-        modify_ \w -> w { velocity = { x: 0.0, y: -speed } }
+        modify_ \w -> w { player = bound $ moveUp w.player }
         preventDefaultBehavior
       " " -> do
         togglePause
         preventDefaultBehavior
       _ -> executeDefaultBehavior
-
-  onTick (TickEvent { delta }) = do
-    { bound } <- utilities
-    modify_ \w@{ velocity: v, player } ->
-      withCoords player \p ->
-        w { player = bound $ { x: p.x + v.x * delta, y: p.y + v.y * delta } `wrt` canvas }
