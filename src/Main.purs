@@ -4,21 +4,8 @@ import Prelude
 
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Reactor
-  ( CoordinateSystem
-  , Reactor
-  , cell
-  , executeDefaultBehavior
-  , fill
-  , grid
-  , modify_
-  , preventDefaultBehavior
-  , runReactor
-  , togglePause
-  , utilities
-  , wrt
-  )
-import Reactor.Events (KeypressEvent(..), MouseEvent(..))
+import Reactor (CoordinateSystem, Reactor, executeDefaultBehavior, fill, grid, modify_, relativeTo, runReactor, tile, togglePause, utilities)
+import Reactor.Events (Event(..))
 import Reactor.Graphics.Colors as Color
 import Reactor.Graphics.CoordinateSystem (moveDown, moveLeft, moveRight, moveUp)
 import Reactor.Internal.Helpers (withJust)
@@ -27,46 +14,30 @@ main :: Effect Unit
 main = runReactor reactor { title: "Moving Dot", width: 20, height: 20 }
 
 type Point = CoordinateSystem { x :: Number, y :: Number }
-
-type World =
-  { player :: Point
-  , cursor :: Maybe Point
-  , paused :: Boolean
-  }
+type World = { player :: Point, cursor :: Maybe Point, paused :: Boolean }
 
 reactor :: forall m. Reactor m World
-reactor = { init, onMouse, onKey, draw, onTick: \_ -> pure unit }
+reactor = { init, draw, handleEvent }
   where
-  init =
-    { player: { x: 0, y: 0 } `wrt` grid
-    , cursor: Nothing
-    , paused: false
-    }
+  init = { player: { x: 0, y: 0 } `relativeTo` grid, cursor: Nothing, paused: false }
 
   draw { cursor, player } = do
-    fill Color.blue400 $ cell player
-    withJust cursor $ fill Color.gray200 <<< cell
+    fill Color.blue400 $ tile player
+    withJust cursor $ fill Color.gray200 <<< tile
 
-  onMouse (MouseEvent { x, y }) = do
-    modify_ \w -> w { cursor = Just $ { x, y } `wrt` grid }
-    preventDefaultBehavior
-
-  onKey (KeypressEvent key _) = do
+  handleEvent event = do
     { bound } <- utilities
-    case key of
-      "ArrowLeft" -> do
+    case event of
+      MouseEvent { gridCoords } -> modify_ \w -> w { cursor = Just gridCoords }
+
+      KeypressEvent "ArrowLeft" _ ->
         modify_ \w -> w { player = bound $ moveLeft w.player }
-        preventDefaultBehavior
-      "ArrowRight" -> do
+      KeypressEvent "ArrowRight" _ ->
         modify_ \w -> w { player = bound $ moveRight w.player }
-        preventDefaultBehavior
-      "ArrowDown" -> do
+      KeypressEvent "ArrowDown" _ ->
         modify_ \w -> w { player = bound $ moveDown w.player }
-        preventDefaultBehavior
-      "ArrowUp" -> do
+      KeypressEvent "ArrowUp" _ ->
         modify_ \w -> w { player = bound $ moveUp w.player }
-        preventDefaultBehavior
-      " " -> do
-        togglePause
-        preventDefaultBehavior
+      KeypressEvent " " _ -> togglePause
+
       _ -> executeDefaultBehavior

@@ -32,7 +32,7 @@ in  upstream
       , "web-uievents"
       ]
     , repo = "https://github.com/Eugleo/purescript-grid-reactors.git"
-    , version = "4d27d7ee37a1980a25403554a2badc79090593c5"
+    , version = "56ffe5260f84ef89e2916f64fef13550a90e3d50"
     }
   with canvas-action =
     { dependencies =
