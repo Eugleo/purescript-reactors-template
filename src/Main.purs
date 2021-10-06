@@ -14,13 +14,13 @@ import Reactor.Reaction (Reaction)
 main :: Effect Unit
 main = runReactor reactor { title: "Moving Dot", width: 20, height: 20 }
 
-type World = { player :: Point, cursor :: Maybe Point, paused :: Boolean }
+type World = { player :: Point, cursor :: Maybe Point }
 
 reactor :: Reactor World
-reactor = { initial, draw, handleEvent, isPaused: _.paused }
+reactor = { initial, draw, handleEvent, isPaused: const true }
 
 initial :: World
-initial = { player: { x: 0, y: 0 }, cursor: Nothing, paused: false }
+initial = { player: { x: 0, y: 0 }, cursor: Nothing }
 
 draw :: World -> Drawing
 draw { cursor, player } = do
@@ -34,7 +34,7 @@ handleEvent event = do
   let
     clip a m = min (max 0 a) (m - 1)
     bound { x, y } = { x: clip x width, y: clip y height }
-  { player: { x, y }, paused } <- getW
+  { player: { x, y } } <- getW
   case event of
     Mouse { position } -> updateW_ { cursor: Just position }
 
@@ -42,6 +42,5 @@ handleEvent event = do
     KeyPress { key: "ArrowRight" } -> updateW_ { player: bound { x: x + 1, y } }
     KeyPress { key: "ArrowDown" } -> updateW_ { player: bound { x, y: y + 1 } }
     KeyPress { key: "ArrowUp" } -> updateW_ { player: bound { x, y: y - 1 } }
-    KeyPress { key: " " } -> updateW_ { paused: not paused }
 
     _ -> executeDefaultBehavior
