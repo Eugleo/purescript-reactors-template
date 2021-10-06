@@ -38,3 +38,25 @@ Once you have a name for your project, make updates in the following three place
 - Inbetween the `title` tags in `dev/index.html`. This will change the title of the reactor webpage.
 - The field `name` in `spago.dhall`.
 - The field `name` in `package.json`.
+
+## How to migrate to a newer version
+
+Sometimes the template is updated, mostly to keep up with new versions of `grid-reactors`. I would argue against updating your projects to a new template version unless it is strictly necessary. However, if you're absolutely sure you want to do it, here are the required steps:
+
+1. Update the `version` field of `grid-reactors` in `packages.dhall`. Just copy the version from `packages.dhall` on this repo and paste it into the appropriate place in `packages.dhall` in your project.
+
+    ```
+    in  upstream
+      with grid-reactors =
+        { dependencies =
+          [ "aff"
+          , ...
+          ]
+        , repo = "https://github.com/Eugleo/purescript-grid-reactors.git"
+        , version = "67af8b5a201d7d29d688c38216cd4339c2cf9ae8"      <<< THIS STRING
+        }
+
+    ```
+
+2. Build your project by running `npm run spago-build`. This will download the new version of `grid-reactors`.
+3. Fix any errors that may have occured during the migration due to changes in the library.
