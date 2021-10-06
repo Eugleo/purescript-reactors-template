@@ -2,19 +2,20 @@ module Main where
 
 import Prelude
 
+import Data.Grid (Coordinates)
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Reactor (Reactor, dimensions, executeDefaultBehavior, getW, runReactor, updateW_)
 import Reactor.Events (Event(..))
 import Reactor.Graphics.Colors as Color
-import Reactor.Graphics.Drawing (Point, Drawing, fill, tile)
+import Reactor.Graphics.Drawing (Drawing, fill, tile)
 import Reactor.Internal.Helpers (withJust)
 import Reactor.Reaction (Reaction)
 
 main :: Effect Unit
 main = runReactor reactor { title: "Moving Dot", width: 20, height: 20 }
 
-type World = { player :: Point, cursor :: Maybe Point }
+type World = { player :: Coordinates, cursor :: Maybe Coordinates }
 
 reactor :: Reactor World
 reactor = { initial, draw, handleEvent, isPaused: const true }
