@@ -1,5 +1,6 @@
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.14.4-20210826/packages.dhall sha256:eee0765aa98e0da8fc414768870ad588e7cada060f9f7c23c37385c169f74d9f
+      https://github.com/purescript/package-sets/releases/download/psc-0.14.5-20211111/packages.dhall
+        sha256:7ed6350fe897a93926d16298e37d2324aabbe5eca99810204719dc3632fb555f
 
 in  upstream
   with grid-reactors =
@@ -33,33 +34,4 @@ in  upstream
       ]
     , repo = "https://github.com/Eugleo/purescript-grid-reactors.git"
     , version = "b4ea2f2d8a4ab15511d3e3e3d662c6ba17272cf2"
-    }
-  with canvas-action =
-    { dependencies =
-      [ "aff"
-      , "arrays"
-      , "canvas"
-      , "colors"
-      , "effect"
-      , "either"
-      , "exceptions"
-      , "foldable-traversable"
-      , "math"
-      , "maybe"
-      , "numbers"
-      , "polymorphic-vectors"
-      , "prelude"
-      , "refs"
-      , "run"
-      , "transformers"
-      , "tuples"
-      , "type-equality"
-      , "typelevel-prelude"
-      , "unsafe-coerce"
-      , "web-dom"
-      , "web-events"
-      , "web-html"
-      ]
-    , repo = "https://github.com/artemisSystem/purescript-canvas-action.git"
-    , version = "43de19ee369d1ff9fe7eff1e583b828809fd9e36"
     }
