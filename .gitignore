@@ -129,6 +129,7 @@ node_modules
 
 # Generated files
 .psci
+.psc-ide-port
 output
 
 ### VisualStudioCode ###
